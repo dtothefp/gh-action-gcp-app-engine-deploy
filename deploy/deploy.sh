@@ -23,17 +23,6 @@ case $BUMP in
   ;;
 esac
 
-printf "You are about to deploy a new *${BUMP}* version to staging.\n"
-printf "This will also create and push a new git tag.\n"
-printf "Continue? (Y/n) > "
-
-read response
-if [ "$response" == "n" ]; then
-  echo -e "${RED}Deploy aborted.${NOCOLOR}"
-  exit 1
-fi
-
-
 gcloud config set project goodrx-content-prod;
 gcloud config set app/cloud_build_timeout 1800;
 

@@ -7,6 +7,11 @@ on:
         description: Semver version (patch|minor|major)
         required: true
         default: patch
+env:
+  NODE_VERSION: 14.0.0
+  GIT_USER: goodrx-ops-frontend
+  GIT_EMAIL: engineering-ops+fe@goodrx.com
+  GIT_URL: 'git@github.com:${{ env.GITHUB_REPOSITORY }}.git'
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,6 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@master
+        with:
+          node-version: ${{ env.NODE_VERSION }}
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -22,5 +30,17 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
+      - name: Version
+        run: |
+          yarn version --${VERSION}
+          PKG_VERSION=${awk -F\" '/"version":/ {print $4}' package.json};
+          echo "PKG_VERSION=${PKG_VERSION}" >> $GITHUB_ENV
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+      - name: Check the version
+        run: echo ${{ env.PKG_VERSION }}
       - name: GCP App Engine Describe
         run: gcloud app describe
+      - uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
