@@ -9,9 +9,9 @@ on:
         default: patch
 env:
   NODE_VERSION: 14.0.0
-  GIT_USER: goodrx-ops-frontend
-  GIT_EMAIL: engineering-ops+fe@goodrx.com
-  # GIT_URL: 'git@github.com:${{ env.GITHUB_REPOSITORY }}.git'
+  GIT_USER: dtothefp
+  GIT_EMAIL: dtothefp@gmail.com
+  GIT_URL: 'git@github.com:${{ env.GITHUB_REPOSITORY }}.git'
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: actions/setup-node@master
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -30,10 +32,22 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
+      - name: Setup Git
+        run: |
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          echo "GIT_URL=git@github.com:${GITHUB_REPOSITORY}.git" >> $GITHUB_ENV
+        env:
+          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
+      - name: Git Credentials
+        run: |
+          git config --global user.name $GIT_USER
+          git config --global user.email $GIT_EMAIL
+          git remote set-url origin $GIT_URL
+          git remote show origin
       - name: Version
         run: |
           yarn version --${VERSION}
-          PKG_VERSION=${awk -F\" '/"version":/ {print $4}' package.json};
+          PKG_VERSION=$(node -pe "require('./package.json').version");
           echo "PKG_VERSION=${PKG_VERSION}" >> $GITHUB_ENV
         env:
           VERSION: ${{ github.event.inputs.version }}
