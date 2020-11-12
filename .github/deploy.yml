@@ -1,0 +1,23 @@
+name: Deploy App Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Semver version (patch|minor|major)
+        required: true
+        default: patch
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy App Engine
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '285.0.0'
+          project_id: 'good-ui'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
