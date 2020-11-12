@@ -11,7 +11,6 @@ env:
   NODE_VERSION: 14.0.0
   GIT_USER: dtothefp
   GIT_EMAIL: dtothefp@gmail.com
-  GIT_URL: 'git@github.com:${{ env.GITHUB_REPOSITORY }}.git'
 jobs:
   deploy:
     runs-on: ubuntu-latest
