@@ -21,7 +21,7 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Test Write Env
-        run: echo "TEST=TEST" >> $GITHUB_ENV
+        run: echo "TEST=THIS_IS_A_TEST" >> $GITHUB_ENV
       - name: Test READ Env
         run: echo "TEST $TEST"
       - uses: actions/setup-node@master
@@ -38,14 +38,14 @@ jobs:
       - name: Setup Git
         run: |
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          echo "GIT_URL=git@github.com:${GITHUB_REPOSITORY}.git" >> $GITHUB_ENV
+          echo "REPO_URL=git@github.com:$GITHUB_REPOSITORY.git" >> $GITHUB_ENV
         env:
           GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
       - name: Git Credentials
         run: |
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
-          git remote set-url origin $GIT_URL
+          git remote set-url origin $REPO_URL
           git remote show origin
       - name: Version
         run: |
