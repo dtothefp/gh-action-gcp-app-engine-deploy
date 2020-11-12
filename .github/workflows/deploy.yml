@@ -23,7 +23,7 @@ jobs:
       - name: Test Write Env
         run: echo "TEST=TEST" >> $GITHUB_ENV
       - name: Test READ Env
-        run: echo "TEST: $TEST"
+        run: echo "TEST $TEST"
       - uses: actions/setup-node@master
         with:
           node-version: ${{ env.NODE_VERSION }}
