@@ -22,6 +22,7 @@ jobs:
           fetch-depth: '0'
       - name: Test Write Env
         run: echo "TEST=THIS_IS_A_TEST" >> $GITHUB_ENV
+      - run: echo "REPO_URL=git@github.com:$GITHUB_REPOSITORY.git" >> $GITHUB_ENV
       - name: Test READ Env
         run: echo "TEST $TEST"
       - uses: actions/setup-node@master
