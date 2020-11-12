@@ -11,6 +11,7 @@ env:
   NODE_VERSION: 14.0.0
   GIT_USER: dtothefp
   GIT_EMAIL: dtothefp@gmail.com
+  PROJECT_ID: goodrx-content-prod
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -39,15 +40,21 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.version }}
       - run: echo "VERSION $VERSION"
-      # - name: GCP Creds
-        # uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        # with:
-          # version: '285.0.0'
-          # project_id: 'goodrx-content-prod'
-          # service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-          # service_account_key: ${{ secrets.GCP_SA_KEY }}
-          # export_default_credentials: true
-      # - name: Check the version
-        # run: echo ${{ env.PKG_VERSION }}
-      # - name: GCP App Engine Describe
-        # run: gcloud app describe
+      - name: GCP Creds
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '285.0.0'
+          project_id: 'goodrx-content-prod'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      - name: GCP Cloudbuild
+        run: |
+          gcloud config set project $PROJECT_ID;
+          gcloud config set app/cloud_build_timeout 1800;
+          gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
+      - name: GCP App Engine Deploy
+        run: |
+          gcloud app deploy --no-promote --version=${VERSION//\./-} --image-url='us.gcr.io/goodrx-content-prod/web:latest' --quiet;
+      - name: Push Tags
+        run: git push --tags && git push

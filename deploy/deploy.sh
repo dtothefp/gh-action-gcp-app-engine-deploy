@@ -26,14 +26,12 @@ esac
 gcloud config set project goodrx-content-prod;
 gcloud config set app/cloud_build_timeout 1800;
 
-yarn version --${BUMP}
-
 gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
 
 VERSION=v$(node -pe "require('./package.json').version")
 GCLOUD_SAFE_VERSION=${VERSION//\./-}
 
-gcloud app deploy --no-promote --version=$GCLOUD_SAFE_VERSION --image-url='us.gcr.io/goodrx-content-prod/web:latest' --quiet;
+gcloud app deploy --no-promote --version=${VERSION//\./-} --image-url='us.gcr.io/goodrx-content-prod/web:latest' --quiet;
 
 git push --tags && git push
 
