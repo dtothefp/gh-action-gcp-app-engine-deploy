@@ -28,7 +28,6 @@ jobs:
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
           git remote set-url origin git@github.com:$GITHUB_REPOSITORY.git
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       # - uses: actions/setup-node@master
         # with:
           # node-version: ${{ env.NODE_VERSION }}
