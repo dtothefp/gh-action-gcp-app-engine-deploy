@@ -21,10 +21,14 @@ jobs:
         with:
           fetch-depth: '0'
       - name: Test Write Env
-        run: echo "TEST=THIS_IS_A_TEST" >> $GITHUB_ENV
-      - run: echo "REPO_URL=git@github.com:$GITHUB_REPOSITORY.git" >> $GITHUB_ENV
+        run: |
+          echo "TEST=THIS_IS_A_TEST" >> $GITHUB_ENV
+          echo "REPO_URL=git@github.com:$GITHUB_REPOSITORY.git" >> $GITHUB_ENV
+      - run:
       - name: Test READ Env
-        run: echo "TEST $TEST"
+        run: |
+          echo "TEST $TEST"
+          echo "URL $REPO_URL"
       - uses: actions/setup-node@master
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -36,18 +40,17 @@ jobs:
           service_account_email: ${{ secrets.GCP_SA_EMAIL }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
+      - uses: webfactory/ssh-agent@v0.2.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Setup Git
-        run: |
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          echo "REPO_URL=git@github.com:$GITHUB_REPOSITORY.git" >> $GITHUB_ENV
-        env:
-          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-      - name: Git Credentials
         run: |
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
-          git remote set-url origin $REPO_URL
-          git remote show origin
+          git remote set-url origin git@github.com:$GITHUB_REPOSITORY.git
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+        # env:
+          # GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
       - name: Version
         run: |
           yarn version --${VERSION}
@@ -59,6 +62,3 @@ jobs:
         run: echo ${{ env.PKG_VERSION }}
       - name: GCP App Engine Describe
         run: gcloud app describe
-      - uses: webfactory/ssh-agent@v0.2.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
