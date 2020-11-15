@@ -4,6 +4,7 @@
 
 ### Added
 
+- Things
 - Stuff
 
 ### Fixed
