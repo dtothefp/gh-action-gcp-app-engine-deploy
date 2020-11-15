@@ -54,4 +54,6 @@ jobs:
         run: |
           gcloud app deploy --no-promote --version=${VERSION//\./-} --image-url='us.gcr.io/goodrx-content-prod/web:latest' --quiet;
       - name: Push Tags
-        run: git push --tags && git push
+        run: |
+          git checkout master
+          git push --tags && git push

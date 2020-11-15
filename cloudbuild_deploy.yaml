@@ -10,4 +10,4 @@ steps:
         --build-arg CWF_VERSION=$(awk -F\" '/"version":/ {print $4}' package.json) \
         . \
         || exit 1
-images: ['us.gcr.io/$PROJECT_ID/web:latest']
+images: ['us.gcr.io/$PROJECT_ID/web:deploy-test']
