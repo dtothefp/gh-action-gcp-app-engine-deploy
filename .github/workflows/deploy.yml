@@ -55,7 +55,7 @@ jobs:
           gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
       - name: GCP App Engine Deploy
         run: |
-          gcloud app deploy --no-promote --version=${VERSION//\./-} --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
+          gcloud app deploy --no-promote --version=${VERSION//\./-}-deploy-test --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
       - name: Push Tags
         run: |
           git push --tags && git push origin main
