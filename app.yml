@@ -1,0 +1,23 @@
+# https://cloud.google.com/appengine/docs/flexible/nodejs/reference/app-yaml
+runtime: custom
+env: flex
+
+automatic_scaling:
+  max_concurrent_requests: 5
+  max_num_instances: 100
+
+liveness_check:
+  path: '/api/liveness_check'
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 4
+  success_threshold: 2
+  initial_delay_sec: 300
+
+readiness_check:
+  path: '/api/readiness_check'
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
