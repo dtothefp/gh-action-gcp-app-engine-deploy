@@ -5,8 +5,8 @@ steps:
     args:
       - '-c'
       - |
-        docker build -t us.gcr.io/$PROJECT_ID/web:latest \
-        --cache-from us.gcr.io/$PROJECT_ID/web:latest \
+        docker build -t us.gcr.io/$PROJECT_ID/web:deploy-test \
+        --cache-from us.gcr.io/$PROJECT_ID/web:deploy-test \
         --build-arg CWF_VERSION=$(awk -F\" '/"version":/ {print $4}' package.json) \
         . \
         || exit 1
