@@ -39,13 +39,15 @@ const prevVsCurrComparLink = contents[lastIndex]
 
 const newContents = [
   ...contents.slice(0, firstIndex),
-  contents[firstIndex],
+  ...[contents[firstIndex], ''],
   newVersionLink,
   ...contents.slice(firstIndex + 1, lastIndex),
   headCompareLink,
   prevVsCurrComparLink,
   ...contents.slice(lastIndex + 1, contents.length)
 ];
+
+console.log(newContents)
 
 console.log(`*** Writing CHANGELOG.md version: ${VERSION} ***`);
 
