@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.1.5] - 2020-11-15
+
 ### Added
 
 - Things
@@ -17,5 +20,6 @@ Things
 
 - All the things
 
-[unreleased]: https://github.com/dtothefp/gh-action-gcp-app-engine-deploy/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/dtothefp/gh-action-gcp-app-engine-deploy/compare/v0.1.5...HEAD
+[0.1.5]: https://github.com/dtothefp/gh-action-gcp-app-engine-deploy/compare/v0.0.1...0.1.5
 [0.0.1]: https://github.com/dtothefp/gh-action-gcp-app-engine-deploy/compare/v0.0.1...v0.0.0

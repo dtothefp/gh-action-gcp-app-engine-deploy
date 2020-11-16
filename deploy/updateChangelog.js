@@ -19,12 +19,19 @@ var utcDate = new Date(date.toUTCString());
 
 utcDate.setHours(utcDate.getHours()-8);
 
-var usDate = new Date(utcDate).toLocaleDateString('en-US');
+var usDate = new Date(utcDate)
+  .toLocaleDateString('en-US')
+  .split('/');
+
+const formattedDate = [
+  ...usDate.slice(-1),
+  ...usDate.slice(0, 2),
+].join('-');
 
 const newContents = [
   ...contents.slice(0, firstIndex),
   ...[contents[firstIndex], '\n'],
-  `## [${VERSION}] - ${usDate}`,
+  `## [${VERSION}] - ${formattedDate}`,
   ...contents.slice(firstIndex + 1, lastIndex),
   contents[lastIndex].replace(/^(.+?v)[0-9]\.[0-9]\.[0-9](\.\.\.HEAD)$/, (a, b, c) => {
     return b + VERSION + c;
