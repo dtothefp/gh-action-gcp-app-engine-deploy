@@ -39,7 +39,7 @@ const prevVsCurrComparLink = contents[lastIndex]
 
 const newContents = [
   ...contents.slice(0, firstIndex),
-  ...[contents[firstIndex], '\n'],
+  contents[firstIndex],
   newVersionLink,
   ...contents.slice(firstIndex + 1, lastIndex),
   headCompareLink,
