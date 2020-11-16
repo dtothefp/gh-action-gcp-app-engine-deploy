@@ -37,7 +37,7 @@ const newContents = [
     return b + VERSION + c;
   }),
   contents[lastIndex].replace(/^\[unreleased\](:\s.+?)HEAD$/, (a, b) => {
-    return `[${VERSION}]${b}${VERSION}`;
+    return `[${VERSION}]${b}v${VERSION}`;
   }),
   ...contents.slice(lastIndex + 1, contents.length)
 ];
