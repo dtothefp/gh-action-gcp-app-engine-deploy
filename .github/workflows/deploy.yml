@@ -38,7 +38,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Version
         run: |
-          yarn global add semver
+          sudo yarn global add semver
           CURR_VERSION=$(node -pe "require('./package.json').version");
           VERSION=$(semver -i $LEVEL $CURR_VERSION);
           echo "VERSION $VERSION"
