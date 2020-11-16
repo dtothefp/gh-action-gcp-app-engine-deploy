@@ -48,20 +48,19 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         env:
           LEVEL: ${{ github.event.inputs.version }}
-      - run: echo "VERSION $VERSION"
-      - name: GCP Creds
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
-        with:
-          project_id: 'goodrx-content-prod'
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
-      - name: GCP Cloudbuild
-        run: |
-          gcloud config set app/cloud_build_timeout 1800;
-          gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
-      - name: GCP App Engine Deploy
-        run: |
-          gcloud app deploy --no-promote --version=${VERSION//\./-}-deploy-test --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
-      - name: Push Tags
-        run: |
-          git push --tags && git push origin main
+      # - name: GCP Creds
+        # uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        # with:
+          # project_id: 'goodrx-content-prod'
+          # service_account_key: ${{ secrets.GCP_SA_KEY }}
+          # export_default_credentials: true
+      # - name: GCP Cloudbuild
+        # run: |
+          # gcloud config set app/cloud_build_timeout 1800;
+          # gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
+      # - name: GCP App Engine Deploy
+        # run: |
+          # gcloud app deploy --no-promote --version=${VERSION//\./-}-deploy-test --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
+      # - name: Push Tags
+        # run: |
+          # git push --tags && git push origin main
