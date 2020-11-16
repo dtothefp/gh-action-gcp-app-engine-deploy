@@ -12,6 +12,7 @@ env:
   GIT_USER: dtothefp
   GIT_EMAIL: dtothefp@gmail.com
   PROJECT_ID: goodrx-content-prod
+  MAIN_BRANCH: ${{ env.MAIN_BRANCH }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -31,7 +32,7 @@ jobs:
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
           git remote set-url origin git@github.com:$GITHUB_REPOSITORY.git
-          git reset --hard main
+          git reset --hard $MAIN_BRANCH
           git remote show origin
       - uses: actions/setup-node@master
         with:
@@ -41,7 +42,7 @@ jobs:
           sudo yarn global add semver
           CURR_VERSION=$(node -pe "require('./package.json').version");
           VERSION=$(semver -i $LEVEL $CURR_VERSION);
-          node deploy/updateChangelog.js
+          VERSION=VERSION node deploy/updateChangelog.js
           git add CHANGELOG.md
           yarn version --${LEVEL}
           echo "VERSION $VERSION"
@@ -63,4 +64,4 @@ jobs:
           gcloud app deploy --no-promote --version=${VERSION//\./-}-deploy-test --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
       - name: Push Tags
         run: |
-          git push --tags && git push origin main
+          git push --tags && git push origin $MAIN_BRANCH
