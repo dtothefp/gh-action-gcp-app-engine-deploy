@@ -39,7 +39,7 @@ jobs:
       - name: Version
         run: |
           yarn global add semver
-          CURR_VERSION=$(node -pe "require('./package.json').version")";
+          CURR_VERSION=$(node -pe "require('./package.json').version");
           VERSION=$(semver -i $LEVEL $CURR_VERSION);
           echo "VERSION $VERSION"
           node deploy/updateChangelog.js
