@@ -13,7 +13,7 @@ const reducer = (re) => {
   };
 };
 const firstIndex = contents.reduce(reducer(/\[Unreleased\]$/), 0);
-const lastIndex = contents.reduce(reducer(/^\[unreleased\]:/), 0);
+const lastIndex = contents.reduceRight(reducer(/^\[unreleased\]:/), 0);
 var date = new Date();
 var utcDate = new Date(date.toUTCString());
 
