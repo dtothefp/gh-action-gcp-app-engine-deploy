@@ -58,7 +58,6 @@ jobs:
           SLACK_MESSAGE: '[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> started :crossed_fingers:'
           SLACK_USERNAME: cwf_release
           SLACK_ICON: https://github.com/rtCamp.png?size=48
-        env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
