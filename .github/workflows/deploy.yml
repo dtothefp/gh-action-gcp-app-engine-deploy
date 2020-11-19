@@ -54,10 +54,10 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: ':crossed_fingers:'
+          SLACK_MESSAGE: v${{ env.VERSION }}
           SLACK_USERNAME: cwf_release
           SLACK_COLOR: '#ffff00'
-          SLACK_FOOTER: v${{ env.VERSION }}
+          SLACK_FOOTER: ':crossed_fingers:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -81,9 +81,10 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Success
-          SLACK_MESSAGE: ':tada:'
+          SLACK_MESSAGE: v${{ env.VERSION }}
           SLACK_USERNAME: cwf_release
-          SLACK_FOOTER: v${{ env.VERSION }}
+          SLACK_USERNAME: cwf_release
+          SLACK_FOOTER: ':tada:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Deploy Failed
         if: ${{ failure() }}
@@ -91,8 +92,8 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Failed
-          SLACK_MESSAGE: ':face_palm:'
+          SLACK_MESSAGE: v${{ env.VERSION }}
           SLACK_USERNAME: cwf_release
           SLACK_COLOR: '#ff0000'
-          SLACK_FOOTER: v${{ env.VERSION }}
+          SLACK_FOOTER: ':face_palm:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
