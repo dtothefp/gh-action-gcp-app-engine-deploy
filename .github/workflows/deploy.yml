@@ -13,6 +13,7 @@ env:
   GIT_EMAIL: dtothefp@gmail.com
   PROJECT_ID: goodrx-content-prod
   JOB_URL: 'https://github.com/{{ env.GITHUB_REPOSITORY }}/actions/runs/{{ github.job }}'
+  SLACK_WEB_HOOK_URL: ${{ secrets.SLACK_WEB_HOOK_URL }}
 jobs:
   deploy:
     runs-on: ubuntu-latest
