@@ -71,9 +71,7 @@ jobs:
           gcloud builds submit --config cloudbuild_deploy.yaml . || exit 1;
       - name: GCP App Engine Deploy
         run: |
-          gcloud app deploy --no-promote --version=v${VERSION//\./-}-deploy-test --image-url='us.gcr.io/$PROJECT_ID/web:deploy-test' --quiet;
-        env:
-          PROJECT_ID: ${{ env.PROJECT_ID }}
+          gcloud app deploy --no-promote --version=v${VERSION//\./-}-deploy-test --image-url=us.gcr.io/$PROJECT_ID/web:deploy-test --quiet;
       - name: Push Tags
         run: |
           git push --tags && git push origin $BRANCH_NAME
