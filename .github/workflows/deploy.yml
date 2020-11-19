@@ -74,29 +74,21 @@ jobs:
       - name: Push Tags
         run: |
           git push --tags && git push origin $BRANCH_NAME
-      # - name: Deploy Complete
-        # if: ${{ success() }}
-        # run: |
-      # - name: Deploy Message
-        # run: |
-          # curl -X POST \
-          # --data-urlencode \
-          # "payload={
-            # \"channel\":\"#fep-alerts\",
-            # \"username\":\"cwf_release\",
-            # \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> finished :tada:\",
-            # \"icon_emoji\":\":hipster:
-          # \"}" \
-          # https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
-      # - name: Deploy Failed
-        # if: ${{ failure() }}
-        # run: |
-          # curl -X POST \
-          # --data-urlencode \
-          # "payload={
-            # \"channel\":\"#fep-alerts\",
-            # \"username\":\"cwf_release\",
-            # \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> failed :face_palm:\",
-            # \"icon_emoji\":\":hipster:
-          # \"}" \
-          # https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
+      - name: Deploy Complete
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2.1.1
+        env:
+          SLACK_CHANNEL: fep-alerts
+          SLACK_TITLE: Deploy Started
+          SLACK_MESSAGE: 'Deploy ${{ env.VERSION }} finished :tada:'
+          SLACK_USERNAME: cwf_release
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Deploy Failed
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2.1.1
+        env:
+          SLACK_CHANNEL: fep-alerts
+          SLACK_TITLE: Deploy Started
+          SLACK_MESSAGE: 'Deploy ${{ env.VERSION }} failed :face_palm:'
+          SLACK_USERNAME: cwf_release
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
