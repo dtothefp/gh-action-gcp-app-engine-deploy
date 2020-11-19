@@ -42,14 +42,13 @@ jobs:
         run: |
           sudo yarn global add semver
           CURR_VERSION=$(node -pe "require('./package.json').version");
-          VERSION=$(semver -i $LEVEL $CURR_VERSION);
-          VERSION=$VERSION node deploy/updateChangelog.js
+          VERSION=$(semver -i $SEMVER_LEVEL $CURR_VERSION); node deploy/updateChangelog.js;
           git add CHANGELOG.md
-          yarn version --${LEVEL}
+          yarn version --${SEMVER_LEVEL}
           echo "VERSION $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         env:
-          LEVEL: ${{ github.event.inputs.version }}
+          SEMVER_LEVEL: ${{ github.event.inputs.version }}
       - name: Deploy Message
         uses: rtCamp/action-slack-notify@v2.1.1
         env:
