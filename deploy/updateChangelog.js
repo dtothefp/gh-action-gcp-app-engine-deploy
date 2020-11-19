@@ -47,8 +47,6 @@ const newContents = [
   ...contents.slice(lastIndex + 1, contents.length)
 ];
 
-console.log(newContents)
-
 console.log(`*** Writing CHANGELOG.md version: ${VERSION} ***`);
 
 writeFileSync(changelogFp, newContents.join('\n'), 'utf8');
