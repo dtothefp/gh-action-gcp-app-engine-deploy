@@ -55,7 +55,7 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy ${{ env.VERSION }} started :crossed_fingers:'
+          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} started :crossed_fingers:'
           SLACK_USERNAME: cwf_release
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: GCP Creds
@@ -80,7 +80,7 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy ${{ env.VERSION }} finished :tada:'
+          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} finished :tada:'
           SLACK_USERNAME: cwf_release
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Deploy Failed
@@ -89,6 +89,6 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy ${{ env.VERSION }} failed :face_palm:'
+          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} failed :face_palm:'
           SLACK_USERNAME: cwf_release
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
