@@ -51,16 +51,15 @@ jobs:
         env:
           LEVEL: ${{ github.event.inputs.version }}
       - name: Deploy Message
-        run: |
-          curl -X POST \
-          --data-urlencode \
-          "payload={
-            \"channel\":\"#fep-alerts\",
-            \"username\":\"cwf_release\",
-            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> started :crossed_fingers:\",
-            \"icon_emoji\":\":hipster:
-          \"}" \
-          https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
+        uses: rtCamp/action-slack-notify@v2.1.1
+        env:
+          SLACK_CHANNEL: fep-alerts
+          SLACK_TITLE: Deploy Started
+          SLACK_MESSAGE: '[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> started :crossed_fingers:'
+          SLACK_USERNAME: cwf_release
+          SLACK_ICON: https://github.com/rtCamp.png?size=48
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -77,29 +76,29 @@ jobs:
       - name: Push Tags
         run: |
           git push --tags && git push origin $BRANCH_NAME
-      - name: Deploy Complete
-        if: ${{ success() }}
-        run: |
-      - name: Deploy Message
-        run: |
-          curl -X POST \
-          --data-urlencode \
-          "payload={
-            \"channel\":\"#fep-alerts\",
-            \"username\":\"cwf_release\",
-            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> finished :tada:\",
-            \"icon_emoji\":\":hipster:
-          \"}" \
-          https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
-      - name: Deploy Failed
-        if: ${{ failure() }}
-        run: |
-          curl -X POST \
-          --data-urlencode \
-          "payload={
-            \"channel\":\"#fep-alerts\",
-            \"username\":\"cwf_release\",
-            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> failed :face_palm:\",
-            \"icon_emoji\":\":hipster:
-          \"}" \
-          https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
+      # - name: Deploy Complete
+        # if: ${{ success() }}
+        # run: |
+      # - name: Deploy Message
+        # run: |
+          # curl -X POST \
+          # --data-urlencode \
+          # "payload={
+            # \"channel\":\"#fep-alerts\",
+            # \"username\":\"cwf_release\",
+            # \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> finished :tada:\",
+            # \"icon_emoji\":\":hipster:
+          # \"}" \
+          # https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
+      # - name: Deploy Failed
+        # if: ${{ failure() }}
+        # run: |
+          # curl -X POST \
+          # --data-urlencode \
+          # "payload={
+            # \"channel\":\"#fep-alerts\",
+            # \"username\":\"cwf_release\",
+            # \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> failed :face_palm:\",
+            # \"icon_emoji\":\":hipster:
+          # \"}" \
+          # https://hooks.slack.com/services/T028T8WD4/B01F8PQS2MA/$SLACK_WEB_HOOK_SECRET
