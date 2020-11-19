@@ -83,7 +83,6 @@ jobs:
           SLACK_TITLE: Deploy Success
           SLACK_MESSAGE: v${{ env.VERSION }}
           SLACK_USERNAME: cwf_release
-          SLACK_USERNAME: cwf_release
           SLACK_FOOTER: ':tada:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Deploy Failed
