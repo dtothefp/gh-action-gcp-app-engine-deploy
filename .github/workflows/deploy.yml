@@ -42,7 +42,8 @@ jobs:
         run: |
           sudo yarn global add semver
           CURR_VERSION=$(node -pe "require('./package.json').version");
-          VERSION=$(semver -i $SEMVER_LEVEL $CURR_VERSION); node deploy/updateChangelog.js;
+          VERSION=$(semver -i $SEMVER_LEVEL $CURR_VERSION)
+          VERSION=$VERSION node deploy/updateChangelog.js
           git add CHANGELOG.md
           yarn version --${SEMVER_LEVEL}
           echo "VERSION $VERSION"
