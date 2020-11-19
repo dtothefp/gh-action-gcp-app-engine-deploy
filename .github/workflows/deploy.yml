@@ -13,6 +13,7 @@ env:
   GIT_EMAIL: dtothefp@gmail.com
   PROJECT_ID: goodrx-content-prod
   SLACK_WEB_HOOK_SECRET: ${{ secrets.SLACK_WEB_HOOK_SECRET }}
+  BOT_USERNAME: fep_release
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -55,7 +56,7 @@ jobs:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
           SLACK_MESSAGE: v${{ env.VERSION }}
-          SLACK_USERNAME: cwf_release
+          SLACK_USERNAME: ${{ env.BOT_USERNAME }}
           SLACK_COLOR: '#ffff00'
           SLACK_FOOTER: ':crossed_fingers:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
@@ -82,7 +83,7 @@ jobs:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Success
           SLACK_MESSAGE: v${{ env.VERSION }}
-          SLACK_USERNAME: cwf_release
+          SLACK_USERNAME: ${{ env.BOT_USERNAME }}
           SLACK_FOOTER: ':tada:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Deploy Failed
@@ -92,7 +93,7 @@ jobs:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Failed
           SLACK_MESSAGE: v${{ env.VERSION }}
-          SLACK_USERNAME: cwf_release
+          SLACK_USERNAME: ${{ env.BOT_USERNAME }}
           SLACK_COLOR: '#ff0000'
           SLACK_FOOTER: ':face_palm:'
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
