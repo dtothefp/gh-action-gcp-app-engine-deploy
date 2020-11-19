@@ -54,9 +54,10 @@ jobs:
         env:
           SLACK_CHANNEL: fep-alerts
           SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} started :crossed_fingers:'
+          SLACK_MESSAGE: ':crossed_fingers:'
           SLACK_USERNAME: cwf_release
           SLACK_COLOR: '#ffff00'
+          SLACK_FOOTER: v${{ env.VERSION }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -79,17 +80,19 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.1.1
         env:
           SLACK_CHANNEL: fep-alerts
-          SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} finished :tada:'
+          SLACK_TITLE: Deploy Success
+          SLACK_MESSAGE: ':tada:'
           SLACK_USERNAME: cwf_release
+          SLACK_FOOTER: v${{ env.VERSION }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Deploy Failed
         if: ${{ failure() }}
         uses: rtCamp/action-slack-notify@v2.1.1
         env:
           SLACK_CHANNEL: fep-alerts
-          SLACK_TITLE: Deploy Started
-          SLACK_MESSAGE: 'Deploy v${{ env.VERSION }} failed :face_palm:'
+          SLACK_TITLE: Deploy Failed
+          SLACK_MESSAGE: ':face_palm:'
           SLACK_USERNAME: cwf_release
           SLACK_COLOR: '#ff0000'
+          SLACK_FOOTER: v${{ env.VERSION }}
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
