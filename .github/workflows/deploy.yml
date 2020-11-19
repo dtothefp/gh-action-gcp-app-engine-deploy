@@ -12,7 +12,7 @@ env:
   GIT_USER: dtothefp
   GIT_EMAIL: dtothefp@gmail.com
   PROJECT_ID: goodrx-content-prod
-  MAIN_BRANCH: main
+  JOB_URL: 'https://github.com/{{ env.GITHUB_REPOSITORY }}/actions/runs/{{ github.job }}'
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -22,8 +22,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: '0'
-          ref: ${{ env.MAIN_BRANCH }}
-      - uses: webfactory/ssh-agent@v0.2.0
+      - uses: nelonoel/branch-name@v1
+      - uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - run: git fetch --depth=1 origin
@@ -32,7 +32,7 @@ jobs:
           git config --global user.name $GIT_USER
           git config --global user.email $GIT_EMAIL
           git remote set-url origin git@github.com:$GITHUB_REPOSITORY.git
-          git reset --hard $MAIN_BRANCH
+          git reset --hard $BRANCH_NAME
           git remote show origin
       - uses: actions/setup-node@master
         with:
@@ -49,6 +49,17 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         env:
           LEVEL: ${{ github.event.inputs.version }}
+      - name: Deploy Message
+        run: |
+          curl -X POST \
+          --data-urlencode \
+          "payload={
+            \"channel\":\"#fep-alerts\",
+            \"username\":\"cwf_release\",
+            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> started :crossed_fingers:\",
+            \"icon_emoji\":\":hipster:
+          \"}" \
+          $SLACK_WEB_HOOK_URL
       - name: GCP Creds
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -64,4 +75,30 @@ jobs:
           gcloud app deploy --no-promote --version=v${VERSION//\./-}-deploy-test --image-url='us.gcr.io/goodrx-content-prod/web:deploy-test' --quiet;
       - name: Push Tags
         run: |
-          git push --tags && git push origin $MAIN_BRANCH
+          git push --tags && git push origin $BRANCH_NAME
+      - name: Deploy Complete
+        if: ${{ success() }}
+        run: |
+      - name: Deploy Message
+        run: |
+          curl -X POST \
+          --data-urlencode \
+          "payload={
+            \"channel\":\"#fep-alerts\",
+            \"username\":\"cwf_release\",
+            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> finished :tada:\",
+            \"icon_emoji\":\":hipster:
+          \"}" \
+          $SLACK_WEB_HOOK_URL
+      - name: Deploy Failed
+        if: ${{ failure() }}
+        run: |
+          curl -X POST \
+          --data-urlencode \
+          "payload={
+            \"channel\":\"#fep-alerts\",
+            \"username\":\"cwf_release\",
+            \"text\":\"[$BRANCH_NAME] <$JOB_URL|CWF Deploy v$VERSION> failed :face_palm:\",
+            \"icon_emoji\":\":hipster:
+          \"}" \
+          $SLACK_WEB_HOOK_URL
