@@ -51,6 +51,7 @@ jobs:
           LEVEL: ${{ github.event.inputs.version }}
       - name: Deploy Message
         run: |
+          echo "URL $SLACK_WEB_HOOK_URL"
           curl -X POST \
           --data-urlencode \
           "payload={
