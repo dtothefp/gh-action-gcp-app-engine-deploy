@@ -46,7 +46,6 @@ jobs:
           node deploy/updateChangelog.js
           git add CHANGELOG.md
           yarn version --new-version $VERSION
-          echo "VERSION $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
         env:
           SEMVER_LEVEL: ${{ github.event.inputs.version }}
