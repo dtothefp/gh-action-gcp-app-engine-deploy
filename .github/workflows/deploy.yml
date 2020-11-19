@@ -72,6 +72,8 @@ jobs:
       - name: GCP App Engine Deploy
         run: |
           gcloud app deploy --no-promote --version=v${VERSION//\./-}-deploy-test --image-url='us.gcr.io/$PROJECT_ID/web:deploy-test' --quiet;
+        env:
+          PROJECT_ID: ${{ env.PROJECT_ID }}
       - name: Push Tags
         run: |
           git push --tags && git push origin $BRANCH_NAME
